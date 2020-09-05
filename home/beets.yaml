@@ -1,0 +1,14 @@
+directory: /storage/music
+
+import:
+    write: yes
+    copy: yes
+    resume: no
+    incremental: yes
+    quiet_fallback: asis
+    duplicate_action: skip
+
+paths:
+    default: $albumartist/[$year] $album%aunique{}/$track - $title
+    singleton: Non-Album/$artist/$title
+    comp: Compilations/$album%aunique{}/$track $title

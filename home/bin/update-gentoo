@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# fully update gentoo system and perform other useful tasks along the way   
+
+msg() {
+    ANSI_GREEN='\033[0;32m'
+    ANSI_NC='\033[0m'
+    echo -e "$ANSI_GREEN$1...$ANSI_NC\n"
+    sleep 1
+}
+
+update() {
+    doas emerge --ask \
+	 --verbose \
+	 --quiet \
+	 --update \
+	 --deep \
+	 --newuse \
+	 --with-bdeps y \
+	 --keep-going \
+	 @world
+}
+
+if [[ $1 == '-s' || $1 == '--sync' ]]; then
+    msg 'syncing portage tree'
+    doas eix-sync
+fi
+
+msg 'updating portage'
+doas emerge --oneshot sys-apps/portage
+
+msg 'updating gentoo'
+update
+
+msg 'updating configuration files'
+doas dispatch-conf
+
+read -p 'emerge @world again? y/n' $UPDATE
+if [[ $UPDATE == 'y' || $UPDATE == 'Y' ]]; then
+    msg 'updating gentoo'
+    update
+fi
+
+msg 'removing obsolete packages'
+doas emerge --ask \
+     --verbose \
+     --quiet \
+     --depclean
+
+msg 'fixing broken packages'
+doas revdep-rebuild

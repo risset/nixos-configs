@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# synchronise remote downloads with local directory
+
+SRC=seedbox:/home31/lrwz/downloads
+DEST=/mnt/data/seedbox
+
+rsync --recursive \
+      --verbose \
+      --ignore-existing \
+      $SRC $DEST

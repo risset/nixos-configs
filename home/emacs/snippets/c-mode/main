@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: main
+# key: main
+# group: functions
+# --
+int main(int argc, char *argv[])
+{
+    $0
+
+    return 0;
+}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: checkbox lit
+# key: cblist
+# --
+* TODO ${heading} [0/0]
+- [ ] $0

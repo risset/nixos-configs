@@ -1,0 +1,1423 @@
+*My personal emacs configuration :3*
+Hosted at https://github.com/risset/dotfiles
+
+* Evil
+** Setup
+Vim emulation for emacs.
+
+#+begin_src emacs-lisp
+(setq evil-want-keybinding nil)
+(setq evil-want-C-i-jump nil)
+
+(use-package evil
+  :init
+  (evil-mode t))
+#+end_src
+
+** Extensions
+Various extensions to make evil mode integrate better into emacs. Work
+in progress.
+
+*** Evil Collection
+#+begin_src emacs-lisp
+(use-package evil-collection
+  :after evil
+  :custom
+  (evil-collection-setup-minibuffer t)
+  (evil-collection-company-use-tng nil)
+  :init
+  (evil-collection-init))
+#+end_src
+
+*** Evil-magit
+#+begin_src emacs-lisp
+(use-package evil-magit)
+#+end_src
+
+*** Evil-surround
+#+begin_src emacs-lisp
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode t))
+#+end_src
+
+**** Evil-commentary
+#+begin_src emacs-lisp
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode t))
+#+end_src
+
+* Org
+I use org-mode quite a lot and am continuously adding to it.
+
+** Appearance
+*** Indentation
+Set flat indentation level throughout org-mode.
+
+#+begin_src emacs-lisp
+(org-indent-mode -1)
+(setq org-adapt-indentation nil)
+#+end_src
+
+*** Pretty Entities
+Show \ symbols as UTF8 characters.
+
+#+begin_src emacs-lisp
+(setq org-pretty-entities t)
+#+end_src
+
+*** Autofill
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+end_src
+
+*** Hide Emphasis Marks
+Hide the *characters* used to format text with /emphasis/
+
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+*** Heading Colours
+#+begin_src emacs-lisp
+(custom-theme-set-faces 'user
+			'(org-level-1 ((t (:foreground "#ae81ff"))))
+			'(org-level-2 ((t (:foreground "#f92672"))))
+			'(org-level-3 ((t (:foreground "#a6e22e"))))
+			'(org-level-4 ((t (:foreground "#66d9ef"))))
+			'(org-level-5 ((t (:foreground "#a1efe4"))))
+			'(org-level-6 ((t (:foreground "#f4bf75")))))
+#+end_src
+
+*** Hide Header Ellipse
+#+begin_src emacs-lisp
+(setq org-ellipsis " ")
+#+end_src
+
+*** Foldable Plain Lists
+#+begin_src emacs-lisp
+(setq org-cycle-include-plain-lists nil)
+#+end_src
+
+*** Inline Images 
+#+begin_src emacs-lisp
+(setq org-image-actual-width nil)
+(setq org-startup-with-inline-images t)
+#+end_src
+
+** Agenda
+*** Agenda Location
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/org/agenda"))
+#+end_src
+
+*** Agenda Sticky
+#+begin_src emacs-lisp
+(setq org-agenda-sticky t)
+#+end_src
+
+** Calendar
+#+begin_src emacs-lisp
+(use-package calfw
+  :config
+  (setq cfw:display-calendar-holidays nil))
+  
+(use-package calfw-org)
+#+end_src
+
+**** Faces
+#+begin_src emacs-lisp
+(defvar cal-bg "#1d1e1f")
+(defvar cal-fg "#f8f8f2")
+(defvar cal-hg "#ae81ff")
+(defvar cal-sg "#f92672")
+
+(custom-set-faces
+ '(cfw:face-title ((t (:foreground "#ae81ff" :weight bold :height 2.0 :inherit variable-pitch))))
+ '(cfw:face-header ((t (:foreground "#f8f8f2" :weight bold))))
+ '(cfw:face-grid ((t :foreground "#272822")))
+ '(cfw:face-default-content ((t :foreground "#bfebbf")))
+ '(cfw:face-periods ((t :foreground "cyan")))
+ '(cfw:face-day-title ((t :background "grey10")))
+ '(cfw:face-default-day ((t :weight bold :inherit cfw:face-day-title)))
+ '(cfw:face-annotation ((t :foreground "RosyBrown" :inherit cfw:face-day-title)))
+ '(cfw:face-disable ((t :foreground "DarkGray" :inherit cfw:face-day-title)))
+ '(cfw:face-today-title ((t :background "#7f9f7f" :weight bold)))
+ '(cfw:face-today ((t :background: "#1d1e1f" :foreground "#f92672" :weight bold)))
+ '(cfw:face-select ((t :background "#2f2f2f")))
+ '(cfw:face-toolbar ((t :foreground "#f8f8f2" :background "#1d1e1f")))
+ '(cfw:face-toolbar-button-off ((t :foreground "Gray10" :weight bold)))
+ '(cfw:face-toolbar-button-on ((t :foreground "Gray50" :weight bold))))
+#+end_src
+
+**** Grid Setting
+#+begin_src emacs-lisp
+;; Default setting
+(setq cfw:fchar-junction ?+
+      cfw:fchar-vertical-line ?|
+      cfw:fchar-horizontal-line ?-
+      cfw:fchar-left-junction ?+
+      cfw:fchar-right-junction ?+
+      cfw:fchar-top-junction ?+
+      cfw:fchar-top-left-corner ?+
+      cfw:fchar-top-right-corner ?+ )
+
+;; Unicode characters
+(setq cfw:fchar-junction ?╋
+      cfw:fchar-vertical-line ?┃
+      cfw:fchar-horizontal-line ?━
+      cfw:fchar-left-junction ?┣
+      cfw:fchar-right-junction ?┫
+      cfw:fchar-top-junction ?┯
+      cfw:fchar-top-left-corner ?┏
+      cfw:fchar-top-right-corner ?┓)
+      
+;; Another unicode chars
+(setq cfw:fchar-junction ?╬
+      cfw:fchar-vertical-line ?║
+      cfw:fchar-horizontal-line ?═
+      cfw:fchar-left-junction ?╠
+      cfw:fchar-right-junction ?╣
+      cfw:fchar-top-junction ?╦
+      cfw:fchar-top-left-corner ?╔
+      cfw:fchar-top-right-corner ?╗)
+#+end_src
+
+** Babel
+*** Languages
+#+begin_src emacs-lisp
+; golang support
+(use-package ob-go)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((lisp . t) 
+   (python . t)
+   (C . t)
+   (go . t)
+   (shell . t)
+   (scheme . t)
+   (haskell . t)))
+#+end_src
+
+*** Execute Code Blocks Without Asking
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
+   
+*** Source Block Indentation
+#+begin_src emacs-lisp
+(setq org-src-preserve-indentation t 
+  org-edit-src-content-indentation 2)
+#+end_src
+      
+*** Source Code Window
+#+begin_src emacs-lisp
+(setq org-src-window-setup 'other-window)
+#+end_src
+
+** Tempo
+Newer versions of Emacs need to load org-tempo for org-mode template
+expansion.
+
+#+begin_src emacs-lisp
+(require 'org-tempo)
+#+end_src
+
+** Capture
+#+begin_src emacs-lisp
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+			       (file+headline "~/org/agenda/unsorted.org" "Study")
+			       "* TODO %i%? ")
+			      ("p" "Todo [project]" entry
+			       (file+headline "~/org/agenda/unsorted.org" "Projects")
+			       "* TODO %i%? ")
+			      ("l" "Todo [life]" entry
+			       (file+headline "~/org/agenda/unsorted.org" "Life")
+			       "* TODO %i%? ")))
+#+end_src
+
+** Frames
+Open org windows in new frames.
+
+#+begin_src emacs-lisp
+(set 'org-agenda-window-setup 'other-frame)
+(set 'org-src-window-setup 'other-frame)
+#+end_src
+
+** Evil
+#+begin_src emacs-lisp
+(use-package evil-org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode))
+#+end_src
+
+** Date format
+#+begin_src emacs-lisp
+(setq-default org-display-custom-times t)
+(setq org-time-stamp-custom-formats '("<%d-%m-%y>" . "[%d-%m-%y %H:%M]"))
+#+end_src
+
+** Pomodoro
+#+begin_src emacs-lisp
+(use-package org-pomodoro)
+#+end_src
+
+* Ivy
+** Ivy
+#+begin_src emacs-lisp
+(use-package ivy
+  :config
+  (ivy-mode 1)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t))
+#+end_src
+
+** Counsel-projectile
+#+begin_src emacs-lisp
+(use-package counsel-projectile)
+#+end_src
+
+* Dired
+** Listing Format
+Change dired's 'ls' command
+
+#+begin_src emacs-lisp
+(setq dired-listing-switches "-lah")
+#+end_src
+
+** Rsync
+Using rsync on files in dired mode
+
+#+begin_src emacs-lisp
+(use-package dired-rsync)
+#+end_src
+
+** Rainbow
+Colours for different filetypes
+
+#+begin_src emacs-lisp
+(use-package dired-rainbow
+  :config
+  (progn
+	(dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
+	(dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+	(dired-rainbow-define xml "#f2d024" ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+	(dired-rainbow-define document "#9561e2" ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+	(dired-rainbow-define markdown "#ffed4a" ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+	(dired-rainbow-define database "#6574cd" ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+	(dired-rainbow-define media "#de751f" ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+	(dired-rainbow-define image "#f66d9b" ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+	(dired-rainbow-define log "#c17d11" ("log"))
+	(dired-rainbow-define shell "#f6993f" ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+	(dired-rainbow-define interpreted "#38c172" ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+	(dired-rainbow-define compiled "#4dc0b5" ("asm" "cl" "lisp" "el" "c" "h" "hh" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+	(dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
+	(dired-rainbow-define compressed "#51d88a" ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+	(dired-rainbow-define packaged "#faad63" ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+	(dired-rainbow-define encrypted "#ffed4a" ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+	(dired-rainbow-define fonts "#6cb2eb" ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+	(dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+	(dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
+	(dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))) 
+#+end_src
+
+** Hide Dotfiles
+Function to turn visibility of hidden files on and off.
+
+#+begin_src emacs-lisp
+(use-package dired-hide-dotfiles)
+#+end_src
+
+* General Programming
+Configurations that mostly affect programming in emacs globally.
+
+** Language Server Protocol
+Programming language servers for code completion and navigation.
+ 
+*** Setup
+Set hooks for required languages and tell it to prefer flycheck.
+
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :init
+  (add-hook 'c-mode-hook #'lsp)
+  (add-hook 'c++-mode-hook #'lsp)
+  (add-hook 'python-mode-hook #'lsp)
+  (add-hook 'go-mode-hook #'lsp)
+  :config
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-eldoc-render-all t))
+#+end_src
+
+*** UI 
+Adds some fancy UI features for LSP. Not sure if I'll use them all
+yet.
+
+#+begin_src emacs-lisp
+;; (use-package lsp-ui
+;;   :config 
+;;   (lsp-ui-flycheck-enable t)
+;;   (setq lsp-idle-delay 0.500))
+#+end_src
+  
+*** Ivy
+Add support for searching workspace symbols with Ivy, as well as
+showing xrefs with ivy.
+
+#+begin_src emacs-lisp
+(use-package lsp-ivy)
+(use-package ivy-xref
+  :init
+  (setq xref-show-definitions-function #'ivy-xref-show-defs)
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+#+end_src
+
+*** Company
+LSP support for company
+
+#+begin_src
+(use-package company-lsp
+  :config
+  (push 'company-lsp company-backends)
+  (setq company-transformers nil
+	company-lsp-async t
+	company-lsp-enable-snippet t
+	company-lsp-cache-candidates t))
+#+end_src
+
+*** Optimisation
+Requires Emacs 28+.
+
+#+begin_src emacs-lisp
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
+#+end_src
+
+** Debug Adapter Protocol
+#+begin_src emacs-lisp
+(use-package dap-mode
+  :config
+  (require 'dap-go))
+  
+#+end_src
+
+** DirEnv
+[[https://direnv.net/][direnv]] integration
+
+#+begin_src emacs-lisp
+(use-package direnv
+ :config
+ (setq direnv-always-show-summary nil)
+ (direnv-mode))
+#+end_src
+
+** Linting
+Syntax checking, more efficient than flymake
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :config
+  (global-flycheck-mode)
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  :custom
+  (flycheck-display-errors-delay .3))
+#+end_src
+
+** Code Completion
+#+begin_src emacs-lisp
+(use-package company
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1)
+  (add-hook 'after-init-hook 'global-company-mode))
+#+end_src
+
+** Project Management
+Features for working with "projects" in emacs
+
+#+begin_src emacs-lisp
+(use-package projectile
+  :config
+  (projectile-mode t)
+  (setq projectile-enable-caching nil)
+  (setq projectile-sort-order 'recently-active))
+#+end_src
+
+** Compilation
+*** Make compilation window automatically disappear
+#+begin_src emacs-lisp
+(setq compilation-finish-functions
+      (lambda (buf str)
+	(if (null (string-match ".*exited abnormally.*" str))
+	    ;;no errors, make the compilation window go away in a few seconds
+	    (progn
+	      (run-at-time
+	       "1 sec" nil 'delete-windows-on
+	       (get-buffer-create "*compilation*"))
+	      (message "No Compilation Errors!")))))
+#+end_src
+
+*** Don't ask to save buffers
+#+begin_src emacs-lisp
+(setq compilation-ask-about-save nil)
+(setq compilation-save-buffers-predicate '(lambda () nil))
+#+end_src
+
+** Version Control
+*** Magit
+Git front-end
+
+#+begin_src emacs-lisp
+(use-package magit
+  :config
+  (setq magit-clone-set-remote.pushDefault nil))
+#+end_src
+
+**** Display Buffer Function
+#+begin_src emacs-lisp
+(setq magit-display-buffer-function
+      (lambda (buffer)
+        (display-buffer
+         buffer (if (and (derived-mode-p 'magit-mode)
+                         (memq (with-current-buffer buffer major-mode)
+                               '(magit-process-mode
+                                 magit-revision-mode
+                                 magit-diff-mode
+                                 magit-stash-mode
+                                 magit-status-mode)))
+                    nil
+                  '(display-buffer-same-window)))))
+#+end_src
+
+** Snippets
+Autoexpansion of keywords, needed for some company features
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :config
+  (yas-global-mode t)
+  (setq yas-triggers-in-field t)) ;; snippets within snippets
+#+end_src
+
+** Parentheses
+Automatic parentheses handling
+
+#+begin_src emacs-lisp
+(use-package smartparens
+  :ensure t
+  :config
+  (require 'smartparens-config)
+  (show-smartparens-mode t))
+#+end_src
+
+** Multiple Cursors
+#+begin_src emacs-lisp
+(use-package iedit)
+
+#+end_src
+
+** Misc
+*** Autosave
+Emacs26+
+
+#+begin_src emacs-lisp
+(auto-save-visited-mode 1)
+(setq auto-save-visited-interval 1)
+#+end_src
+
+*** Indent Settings
+#+begin_src emacs-lisp
+(setq indent-tabs-mode t)
+(setq-default indent-tabs-mode t)
+(setq default-tab-width 4)
+(setq tab-width 4)
+(setq c-basic-indent 4)
+(setq c-basic-offset 4)
+#+end_src
+
+* Languages
+Language-specific configurations.
+
+** C/C++
+Configuration for C and C++, using ccls.
+
+*** LSP
+Provide CCLS backend server for LSP.
+
+#+begin_src emacs-lisp
+(use-package ccls
+  :hook 
+  ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp)))
+  :config
+  (setq  ccls-sem-highlight-method nil)
+  (setq ccls-executable "/usr/bin/ccls"))
+#+end_src
+
+*** Formatting
+Enable clang format for auto code formatting.
+
+#+begin_src emacs-lisp
+(use-package clang-format)
+(defun clang-format-hook ()
+  (add-hook 'before-save-hook (lambda () (clang-format-buffer))))
+#+end_src
+
+*** Flycheck
+Make sure that flycheck is set up for C++ properly.
+
+#+begin_src emacs-lisp
+(setq lsp-prefer-flymake nil)
+(setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+#+end_src
+
+
+*** CMake 
+Enable CMake syntax highlighting and other features.
+
+#+begin_src emacs-lisp
+(use-package cmake-mode)
+#+end_src
+
+** Go
+*** Go Mode
+#+begin_src emacs-lisp
+(use-package go-mode)
+#+end_src
+
+*** Save Hooks
+#+begin_src emacs-lisp
+(defun lsp-go-save-hooks ()
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+    
+(add-hook 'go-mode-hook #'lsp-go-save-hooks)
+#+end_src
+
+*** Debugging
+#+begin_src emacs-lisp
+(require 'dap-go)
+#+end_src
+
+*** Ignore Files
+Have projectile ignore .sum and .mod files
+
+#+begin_src emacs-lisp
+(add-to-list 'projectile-globally-ignored-files "*.sum")
+(add-to-list 'projectile-globally-ignored-files "*.mod")
+#+end_src
+
+** Python
+Configuration for Python using pyls.
+
+*** LSP 
+Start lsp when python mode is activated.
+
+#+begin_src emacs-lisp
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection "pyls")
+          :major-modes '(python-mode)
+          :server-id 'pyls))
+#+end_src
+
+** Haskell
+Configuration for Haskell using haskell-mode and dante.
+
+#+begin_src emacs-lisp
+(use-package haskell-mode)
+
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'dante-mode))
+#+end_src
+
+** Rust
+Not using Rust at the moment but keeping these
+configurations for now anyway.
+
+*** Rust-mode
+Basic language support.
+
+#+begin_src emacs-lisp
+(use-package rust-mode)
+#+end_src
+
+*** Cargo
+Cargo support.
+
+#+begin_src emacs-lisp
+(use-package cargo
+  :config
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+#+end_src
+
+*** Rustfmt
+Code formatting.
+
+#+begin_src emacs-lisp
+(add-hook 'rust-mode-hook
+  (lambda ()
+    (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
+#+end_src
+
+*** Racer
+Code completion.
+
+**** Setup
+#+begin_src emacs-lisp
+(use-package racer)
+#+end_src
+
+**** Racer Binary Path
+#+begin_src emacs-lisp
+(setq racer-cmd "~/.cargo/bin/racer")
+#+end_src
+
+**** Rust Source Code Path
+#+begin_src emacs-lisp
+(setq racer-rust-src-path "/home/lrwz/rust/src")
+#+end_src
+
+**** Hooks
+#+begin_src emacs-lisp
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+#+end_src
+
+*** Flycheck-rust
+Linting.
+
+#+begin_src emacs-lisp
+(use-package flycheck-rust
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+#+end_src
+
+** Common-Lisp
+Configuration for CL using sbcl and slime.
+
+*** Slime
+Enable slim and connect to sbcl.
+
+#+begin_src emacs-lisp
+(use-package slime
+  :config
+  (setq inferior-lisp-program "/usr/bin/sbcl"))
+#+end_src
+
+** JSON
+JSON mode.
+
+#+begin_src emacs-lisp
+(use-package json-mode)
+#+end_src
+
+** YAML
+Syntax highlighting for YAML configuration files.
+
+#+begin_src emacs-lisp
+(use-package yaml-mode)
+#+end_src
+
+** Nix
+Working with Nix language and NixOS.
+
+#+begin_src emacs-lisp
+(use-package nix-mode)
+(use-package nixos-options)
+(use-package company-nixos-options
+  :config
+  (add-to-list 'company-backends 'company-nixos-options))
+#+end_src
+
+** Sclang
+SuperCollider stuff for music.
+
+#+begin_src emacs-lisp
+(require 'sclang)
+#+end_src
+
+* Functions
+Some basic functions to add or modify certain behaviour, will be
+creating more as I become more proficient in elisp.
+
+** Org Insert Heading 
+#+begin_src emacs-lisp
+(defun my-org-insert-heading ()
+  "Insert a new org heading, and also enter evil insertion mode."
+  (interactive)
+  (org-insert-heading-respect-content)
+  (evil-insert nil))
+#+end_src
+
+** Org Insert Subheading
+#+begin_src emacs-lisp
+(defun my-org-insert-subheading ()
+  "Insert a new org heading, and also enter evil insertion mode."
+  (interactive)
+  (org-insert-heading-respect-content)
+  (org-do-demote)
+  (evil-insert nil))
+#+end_src
+
+** Select Word
+#+begin_src emacs-lisp
+(defun my-select-word ()
+  "Select word under cursor."
+  (interactive)
+  (evil-backward-WORD-begin)
+  (evil-visual-char)
+  (evil-forward-WORD-end))
+#+end_src
+
+** TODO Surround Region
+#+begin_src emacs-lisp
+;; (defun my-surround-region (beg end)
+;;   "Insert a string at the beginning and end of a region."
+;;   (interactive)
+;;   (cl--set-buffer-substring beg end (concat prefix
+;;                                            (buffer-substring beg end)
+;;                                            suffix)))
+#+end_src
+
+** Open Calendar
+#+begin_src emacs-lisp
+(defun my-open-calendar ()
+  (interactive)
+  (cfw:open-calendar-buffer
+   :contents-sources
+   (list
+    (cfw:org-create-source)))) 
+#+end_src
+
+** Execute Shell Script
+#+begin_src emacs-lisp
+(defun my-execute-shell-script (&optional a b)
+  (interactive "r")
+  (mark-whole-buffer)
+  (call-process-region a b "sh" t t))
+#+end_src
+
+** Open Images in Directory as Thumbnails
+#+begin_src emacs-lisp
+(defun my-show-thumbnails ()
+  (interactive)
+  (let ((cmd "thumbnails")
+	    (dir "."))
+  (async-shell-command (concat cmd " " dir))))
+#+end_src
+
+* Keys
+Key bindings.
+
+** General
+Set up general to manage key bindings.
+
+#+begin_src emacs-lisp
+(use-package general
+  :config 
+  (general-evil-setup)
+  (general-auto-unbind-keys))
+#+end_src
+
+*** Dired
+Dired-mode bindings.
+
+#+begin_src emacs-lisp
+(general-define-key
+  :states '(normal visual)
+  :keymaps 'dired-mode-map
+  "h" 'dired-up-directory
+  "l" 'dired-find-file
+  "." 'dired-hide-dotfiles-mode)
+#+end_src
+
+*** Ivy
+Ivy-mode bindings.
+
+#+begin_src emacs-lisp
+(general-define-key 
+    :keymaps 'ivy-mode-map
+    "C-h" 'ivy-backward-delete-char)
+#+end_src
+
+*** SuperCollider
+sclang-mode bindings.
+
+#+begin_src emacs-lisp
+(general-define-key
+  :states '(normal visual)
+  :keymaps 'sclang-mode-map
+  "C-c C-c" 'sclang-eval-defun
+  "C-c C-l" 'sclang-eval-line
+  "C-c C-r" 'sclang-recompile
+  "C-c C-p" 'sclang-beginning-of-defun
+  "C-c C-n" 'sclang-end-of-defun)
+#+end_src
+
+** Hydra
+Configure a leader key and menus for calling categorised functions from.
+
+*** Setup
+Set up hydra and use space as leader key.
+
+#+begin_src emacs-lisp
+(use-package hydra)
+(use-package major-mode-hydra)
+
+(general-define-key
+  :states '(normal visual)
+  :keymaps '(override Calendar)
+  "SPC"
+  'hydra-main/body)
+#+end_src
+
+*** Main Body
+The main hydra body, which spawns different heads
+
+#+begin_src emacs-lisp
+(defhydra hydra-main (:color blue)
+  ("SPC" 
+   counsel-M-x
+   "λ")
+  
+  ("b"
+   hydra-buffer/body
+   "buffer")
+
+  ("d"
+   hydra-debug/body
+   "debug")
+   
+   ("e"
+   hydra-edit/body
+   "edit")
+   
+  ("f"
+   hydra-find/body
+   "find")
+   
+  ("g"
+   hydra-git/body
+   "git")
+   
+  ("h"
+   hydra-help/body
+   "help")
+
+  ("k"
+   hydra-bookmarks/body
+   "bookmarks")
+   
+  ("l"
+   hydra-lsp/body
+   "lsp")
+
+  ("m"
+   major-mode-hydra
+   "major mode")
+
+  ("p"
+   hydra-projectile/body
+   "projectile")
+   
+  ("s"
+   hydra-shell/body
+   "shell"))
+#+end_src
+
+*** Sub Bodies
+**** Buffer
+Buffer and file related commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-buffer (:color teal)
+  ("s"
+   (save-buffer)
+   "save")
+  
+  ("x"
+   (kill-buffer)
+   "kill")
+   
+  ("b"
+   (counsel-switch-buffer)
+   "find")
+   
+  ("r"
+   (lambda ()
+	 (interactive)
+	 ;; Emacs27 hack
+         (delete-file (expand-file-name "settings.el" user-emacs-directory))
+         (load-file user-init-file))
+   "reload init"))
+#+end_src
+
+**** Debug
+debug adapter protocol commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-debug (:color teal)
+  ("a"
+   (dap-breakpoint-add)
+   "add breakpoint")
+
+  ("d"
+   (dap-breakpoint-delete)
+   "delete breakpoint")
+
+  ("l"
+   (dap-ui-breakpoints-list)
+   "list breakpoints"))
+#+end_src
+
+**** Edit
+Text editing related commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-edit (:color teal)
+  ("i"
+  iedit-mode
+  "iedit")
+  
+  ("p"
+  smartparens-mode
+  "toggle smartparens")
+
+   ("q"
+   query-replace
+   "query replace")
+
+  ("Q"
+   query-replace-egexp
+   "equery replace (regex)"))
+#+end_src
+  
+**** Find
+Functions for finding files, navigating directories etc.
+
+#+begin_src emacs-lisp
+(defhydra hydra-find (:color teal)
+  ("g"
+   counsel-rg
+   "rg")
+   
+  ("d"
+   (lambda () (interactive) (dired-at-point default-directory))
+   "dired")
+   
+  ("f"
+   counsel-find-file
+   "find file")
+   
+  ("l"
+   counsel-locate
+   "locate")
+
+  ("t"
+   counsel-tramp
+   "tramp")
+
+  ("T"
+   counsel-tramp-quit
+   "tramp (quit)")
+
+  ("s"
+   sudo-edit
+   "sudo")
+
+  ("z"
+   counsel-fzf
+   "fzf")
+
+  ("/"
+   swiper
+   "swiper"))
+#+end_src
+
+**** Git
+Git/magit related commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-git (:color teal)
+  ("s"
+   magit-status
+   "status")
+   
+  ("l"
+   magit-log
+   "log")
+   
+  ("d"
+   magit-diff
+   "diff")
+
+  ("i"
+   magit-init
+   "init")
+
+  ("c"
+   magit-commit
+   "commit")
+   
+  ("C"
+   magit-clone
+   "clone")
+   
+  ("g"
+   magit-checkout
+   "checkout")
+   
+  ("p"
+   magit-push-to-remote
+   "push"))
+#+end_src
+  
+**** Help
+Provides helpful information about various things.
+
+#+begin_src emacs-lisp
+(defhydra hydra-help (:color teal)
+  ("f"
+   counsel-describe-function
+   "describe function")
+   
+  ("v"
+   counsel-describe-variable
+   "describe variable")
+   
+  ("k"
+   describe-key
+   "describe key")
+   
+  ("m"
+   describe-mode
+   "describe mode"))
+#+end_src
+  
+**** Bookmarks
+Bookmark commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-bookmarks (:color teal)
+  ("j"
+   bookmark-jump
+   "jump to bookmark")
+
+  ("d"
+   bookmark-delete
+   "delete bookmark")
+
+  ("s"
+   bookmark-set
+   "set bookmark"))
+#+end_src
+  
+**** LSP
+Language Server Protocol commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-lsp (:color teal)
+  ("d"
+   lsp-find-definition
+   "find definition")
+
+  ("D"
+   lsp-describe-session
+   "describe session")
+
+  ("r"
+   lsp-find-references
+   "find references")
+
+  ("R"
+   lsp-rename
+   "rename symbol"))
+#+end_src
+  
+**** Projectile
+Projectile related commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-projectile (:color teal)
+  ("a"
+   projectile-add-known-project
+   "add project")
+   
+  ("b"
+   counsel-projectile-switch-to-buffer
+   "find buffer")
+   
+  ("c"
+   projectile-compile-project
+   "compile")
+   
+  ("d"
+   counsel-projectile-find-dir
+   "find dir")
+   
+  ("f"
+   counsel-projectile-find-file
+   "find file")
+   
+  ("g"
+   counsel-projectile-rg
+   "rg")
+   
+  ("s"
+   counsel-projectile-switch-project
+   "switch project")
+
+  ("!"
+   projectile-run-async-shell-command-in-root
+   "shell command"))
+#+end_src
+  
+**** Shell
+Shell related commands.
+
+#+begin_src emacs-lisp
+(defhydra hydra-shell (:color teal)
+  ("!"
+   async-shell-command
+   "shell command")
+   
+  ("t"
+  my-show-thumbnails
+   "thumbnails"))
+#+end_src
+  
+*** Major Modes
+Mode-specific hydra commands.
+
+**** Org
+#+begin_src emacs-lisp
+(major-mode-hydra-define org-mode nil
+  ("Headings"
+	(("h"
+	 my-org-insert-heading
+	 "insert heading")
+	
+	("s"
+	 my-org-insert-subheading
+	 "insert subheading")
+
+	("n"
+	 org-narrow-to-subtree
+	 "narrow to subtree")
+
+	("w"
+	 widen
+	 "widen buffer"))
+
+	 "Links"
+	(("o"
+	 org-open-at-point
+	 "open")
+
+	("l"
+	 org-toggle-link-display
+	 "toggle link display")
+
+	("S"
+	 org-store-link
+	 "store link under cursor")
+
+	("L"
+	 org-insert-last-stored-link
+	 "insert last stored link"))
+	
+	 "Lists and Tables"
+	(("t"
+	 org-toggle-checkbox
+	 "toggle checkbox")
+
+	("T"
+	 org-table-create
+	 "create table")
+	
+	("u" (lambda ()
+	   (interactive)
+	   (mark-whole-buffer)
+	   (org-update-checkbox-count))
+	 "update checkbox counts"))))
+#+end_src
+
+**** Python
+#+begin_src emacs-lisp
+(major-mode-hydra-define python-mode nil
+   ("Pipenv"
+   (("p"
+     (pipenv-python "3")
+     "create environment")
+
+    ("i"
+     pipenv-install
+     "install package"))
+
+   "Shell"
+   (("x"
+     run-python
+     "run python"))))
+#+end_src
+
+**** Lisp
+#+begin_src emacs-lisp
+(major-mode-hydra-define lisp-mode nil
+  ("Eval"
+   (("b"
+     slime-eval-buffer
+     "eval buffer")
+	 
+	 ("e"
+	 slime-eval-last-expression
+	 "eval last expression")
+
+	 ("r"
+	 slime-eval-region
+	 "eval region"))))
+#+end_src
+**** Dired
+#+begin_src emacs-lisp
+(major-mode-hydra-define dired-mode nil
+  ("Files"
+   (("f"
+     dired-create-empty-file
+     "create empty file"))))
+#+end_src
+
+**** Sclang
+#+begin_src emacs-lisp
+#+end_src
+
+**** Slime REPL
+#+begin_src emacs-lisp
+(major-mode-hydra-define slime-repl-mode nil
+  ("SLIME REPL"
+   (("c"
+	 slime-repl-clear-buffer
+	 "clear buffer"))))
+#+end_src
+
+* Appearance
+** Font
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+                    :family "FiraCode Nerd Font Mono"
+                    :height 100
+                    :weight 'normal
+                    :width 'normal)
+#+end_src
+
+** Theme
+Load the best colourscheme, monokai :3
+
+#+begin_src emacs-lisp
+(use-package monokai-theme
+  :config
+  (load-theme 'monokai))
+#+end_src
+
+** Disable Menus
+Disable all bars.
+
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+** Line Numbers
+Line numbers, more efficient than linum-mode.
+
+#+begin_src emacs-lisp
+(use-package nlinum
+  :config
+  (global-nlinum-mode)
+  (setq nlinum-format "%d "))
+#+end_src
+
+** Rainbow Delimiters
+Colour coded delimiters.
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters 
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+#+end_src
+
+** Modeline
+*** Doom Modeline
+A nicer modeline that works well in a terminal emulator as well as X.
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :config
+  (setq doom-modeline-icon t) 
+  (setq doom-modeline-buffer-file-name-style 'file-name) ; TRAMP fix
+  (if (display-graphic-p)
+    (doom-modeline-mode 1)))
+#+end_src
+
+* Misc
+Miscellaneous elisp snippets.
+
+** Path
+Fix possible PATH issues. May not actually need anymore, should test.
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
+#+end_src
+
+** Disable Backup and Autosave
+Disable backup and autosave files.
+
+#+begin_src emacs-lisp
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+#+end_src 
+
+** Default Web Browser
+Set default browser used to open web links.
+
+#+begin_src emacs-lisp
+(setq browse-url-browser-function 'browse-url-firefox)
+#+end_src
+
+** TRAMP
+Let TRAMP work properly.
+
+#+begin_src emacs-lisp
+(setq tramp-default-method "ssh") 
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+#+end_src
+
+** Sudo
+#+begin_src emacs-lisp
+(use-package sudo-edit)
+#+end_src
+
+** Help Windows
+#+begin_src emacs-lisp
+(add-to-list 'display-buffer-alist
+             '("*Help*" display-buffer-same-window))
+#+end_src
+
+** Password Prompt
+#+begin_src emacs-lisp
+;; Do not use gpg agent when runing in terminal
+(defadvice epg--start (around advice-epg-disable-agent activate)
+  (let ((agent (getenv "GPG_AGENT_INFO")))
+    (setenv "GPG_AGENT_INFO" nil)
+    ad-do-it
+    (setenv "GPG_AGENT_INFO" agent)))
+#+end_src

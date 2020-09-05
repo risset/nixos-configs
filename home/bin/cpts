@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Copy file with timestamp
+
+DATE_FORMAT="%d-%m-%y_%H:%M:%S"
+IN_FILE=$1
+OUT_PATH=$2
+DATE=$(date +$DATE_FORMAT)
+FILENAME=$(basename $IN_FILE)
+EXT="${FILENAME##*.}"
+
+cp --recursive --verbose $IN_FILE $OUT_PATH/$FILENAME_$DATE.$EXT

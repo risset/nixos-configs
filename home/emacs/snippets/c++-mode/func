@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Function
+# key: f
+# --
+${type} ${name}()
+{
+    $0
+}

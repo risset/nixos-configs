@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+import pyperclip
+import sys
+
+"""
+Generate a pretty artist list for profiles on https://rateyourmusic.com. 
+Easy to update with different/new artists by finding the right ArtistID values 
+on the artist's page and updating the "artists" dictionary.
+"""
+
+def artist_str(artist_id: int, artist_name: str, sep_col: str) -> str:
+    """Format/style a single artist string."""
+    rule = '[Artist{}, {}][b][color {}]    |    [/color][/b]'
+    return rule.format(artist_id, artist_name, sep_col)
+
+
+def generate_artist_list(artists: dict, sep_col: str) -> str:
+    """Create a combined artist string."""
+    artist_list = [artist_str(v, k, sep_col) for k, v in artists.items()]
+    n = 39 # characters at end to discard (don't need final separator...)
+    return ''.join(artist_list)[:-n]
+
+
+if __name__ == '__main__':
+    artists = {
+        'iannis xenakis': 3441,
+        'henry cow': 1827,
+        '灰野 敬二': 10467,
+        'j.s. bach': 3419,
+        'györgy ligeti': 3444,
+        'john coltrane': 1101,
+        'red house painters': 817
+    }
+
+    artist_list = generate_artist_list(artists, sep_col='#ae81ff')
+
+    # copy to clipboard if args given
+    if len(sys.argv) == 2:
+        if (sys.argv[1] == '-clip' or sys.argv[1] == '-c'):
+            pyperclip.copy(artist_list)
+            sys.exit('Copied to clipboard.')
+
+    # otherwise print to standard output
+    print(artist_list)

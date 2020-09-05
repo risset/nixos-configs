@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: Effect
+# key: fx
+# --
+p[\\${name}] = {
+    var in = Mix.new([
+        \in1.ar!2 * 1.0
+    ]);
+
+    var mix = ${};
+    var sig = ${};
+
+
+    (1.0 - mix)) + (sig * mix);
+};

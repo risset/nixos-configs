@@ -1,0 +1,5 @@
+#!/bin/sh
+
+IMAGEDIR=/mnt/data/images
+
+mv "$1" $(find $IMAGEDIR -type d | rofi -i -dmenu -p "> ")

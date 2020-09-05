@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Range Loop
+# key: for
+# group: control structure
+# --
+for (auto &${it} : ${container})
+{
+    $0
+}

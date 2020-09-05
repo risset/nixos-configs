@@ -1,0 +1,39 @@
+#!/usr/bin/python3
+
+# create a new ec2 instance from a number of free tier options
+
+import boto3
+import shutil
+import os.path
+
+
+ami_dict = {
+    'amazon': 'ami-0928886deb619d16f',
+    'rhel': 'ami-0fc841be1f929d7d1',
+    'suse': 'ami-092e26abbc42e948b',
+    'ubuntu': 'ami-00f6a0c18edb19300',
+}
+
+
+def create_key_pair(ec2, name, dest):
+    "Create a new key pair and write to file."
+    key_pair = ec2.create_key_pair(KeyName=name)
+    out = open('{}.pem'.format(name), 'w')
+    out.write(str(key_pair.key_material))
+    shutil.move(out, os.path.expanduser(dest))
+
+
+if __name__ == '__main__':
+    ec2 = boto3.resource('ec2')
+    key_name = input('Enter a name for the key pair: ')
+    ami = input('Select an AMI to use: ')
+
+    create_key_pair(ec2, key_name, '~/.private_keys')
+
+    ec2.create_instances(
+          ImageId=ami_dict[ami],
+          MinCount=1,
+          MaxCount=1,
+          InstanceType='t2.micro',
+          KeyName=key_name
+    )

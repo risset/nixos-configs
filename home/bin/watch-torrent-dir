@@ -1,0 +1,11 @@
+#!/bin/sh
+
+TORRENT_DIR=$HOME/dl/http/torrent
+REMOTE_DIR="seedbox:/home31/lrwz/downloads/watch/rtorrent"
+
+inotifywait --monitor $TORRENT_DIR --event create --event moved_to |
+    while read path action file; do
+	rsync --recursive --verbose --protect-args $TORRENT_DIR/* $REMOTE_DIR
+    done
+
+exit 0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Ndef
+# key: n
+# --
+Ndef(\\${name}
+    $0
+);

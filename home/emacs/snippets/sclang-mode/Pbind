@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: Pbind
+# key: p
+# --
+p[\\${name}] = Pbind(
+    \instrument, \\${instrument},
+
+    // Dynamics 
+    \amp, ${},
+    \dur, ${},
+    \attack, ${},
+    \decay, ${},
+
+    // Pitch
+    \scale, Pfunc({Scale.chromatic}, inf),
+    \octave, ${},
+    \degree, ${},
+    $0
+);

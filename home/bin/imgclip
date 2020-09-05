@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# requires xclip and netnpbm
+
+CMD='xclip -selection clipboard -t image/png'
+
+if [[ $1 != *.png ]]; then
+    anytopnm $1 | pnmtopng | $CMD
+else
+    $CMD -i $1
+fi

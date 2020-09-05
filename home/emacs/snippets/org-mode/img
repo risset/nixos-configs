@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Image
+# key: img
+# --
+#+CAPTION: $1
+#+ATTR_HTML: :alt $2 :title ${3:var}
+#+NAME: $3
+[[$4]]

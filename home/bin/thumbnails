@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# requires bc utility as well as the feh image viewer
+
+# key actions (make use of other scripts)
+# 1 key -> copy image to clipboard
+# 2 key -> delete image
+# 3 key -> move image
+
+sqrt() {
+    echo "scale=2; sqrt($1)" | bc
+}
+
+ceil() {
+    awk 'function ceil(x) {
+        return (x == int(x)) ? x : int(x)+1
+    } { 
+        printf "%d\n", ceil($1) 
+    }'
+}
+
+# number of image files -> number of rows
+get_grid_rows() {
+    sqrt $1 | ceil
+}
+
+# blank/no font: use adobe-blank font or similar
+# fallback to any truetype font with size of 0 (will still be slightly visible)
+BLANK_FONT="/usr/share/fonts/adobe-blank/AdobeBlank.ttf"
+if [[ "$(ls -A $BLANK_FONT)" ]]; then
+    FONT="$BLANK_FONT/0"
+else
+    FONT="$(find /usr/share/fonts -iname '*.ttf' | head -n 1)/0"
+fi
+
+# define image grid dimensions
+NUM_FILES="$(find "$1" -type f -iregex '.*\.\(jpg\|gif\|png\|jpeg\)$' | wc -l)"
+NUM_ROWS=$(get_grid_rows $NUM_FILES)
+WIDTH=1000
+HEIGHT=1000
+OFFSET=100
+THUMB_WIDTH=$((($WIDTH - $OFFSET) / $NUM_ROWS))
+THUMB_HEIGHT=$THUMB_WIDTH
+
+printf "Files: %s\n" $NUM_FILES
+printf "Grid size: %sx%s\n" $WIDTH $HEIGHT
+printf "Thumbnail size: %sx%s\n\n" $THUMB_WIDTH $THUMB_HEIGHT
+
+if [[ -z "$(ls -A $1)" ]]; then
+    echo "No files found."
+    exit 1
+fi
+
+feh --thumbnails \
+    --recursive \
+    --quiet \
+    --thumb-width $THUMB_WIDTH \
+    --thumb-height $THUMB_HEIGHT  \
+    --limit-width $WIDTH \
+    --limit-height $HEIGHT \
+    --geometry $WIDTHx$HEIGHT \
+    --font $FONT \
+    --action1 "imgclip '%f'" \
+    --action2 "rm '%f'" \
+    --action3 'rofi-mv "%f"' \
+    "$1"
+
+exit 0

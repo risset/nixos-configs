@@ -1,0 +1,91 @@
+#!/bin/sh
+
+# update, compile and install linux kernel
+# https://wiki.gentoo.org/wiki/Kernel/Upgrade
+
+BACKUP_DIR=$HOME/.kernel_backups
+KERNEL_BACKUP_NAME=kernel-config-$(uname --kernel-release)
+BOOT=/dev/sdb1
+MAKEOPTS=-j7 -l4 
+
+print() {
+    ANSI_GREEN='\033[0;32m'
+    ANSI_NC='\033[0m'
+    echo -e "$ANSI_GREEN$1$ANSI_NC"
+}
+
+msg() {
+    print "$1..."
+    sleep 1
+}
+
+backup_cfg() {
+    cp --verbose /usr/src/linux/.config $BACKUP_DIR/$KERNEL_BACKUP_NAME
+}
+
+set_kernel() {
+    eselect kernel list
+    echo -e '\n'
+    read -p "Kernel version: " KERNEL_NUMBER
+    doas eselect kernel set $KERNEL_NUMBER
+}
+
+copy_old_cfg() {
+    doas cp --verbose $BACKUP_DIR/$KERNEL_BACKUP_NAME /usr/src/linux/.config
+}
+
+update_old_cfg() {
+    cd /usr/src/linux
+    doas make olddefconfig
+    colordiff .config .config.old
+    read -p 'edit kernel config manually? y/n ' EDIT_KERNEL
+
+    if [[ $EDIT_KERNEL == 'y' || $EDIT_KERNEL == 'Y' ]]; then
+	doas make menuconfig
+    fi
+}
+
+build_kernel() {
+    doas make modules_prepare
+    doas emerge --ask --verbose --quiet @module-rebuild
+    doas make $MAKE_OPTS
+    doas make modules_install
+}
+
+install_kernel() {
+    if [[ $(grep -q $BOOT /proc/mounts) ]]; then
+	doas mount $BOOT /boot
+    fi
+
+    doas make install
+}
+
+update_grub() {
+    doas grub-mkconfig -o /boot/grub/grub.cfg
+    read -p 'reboot? y/n ' REBOOT
+
+    if [[ $REBOOT == 'y' || $REBOOT == 'Y' ]]; then
+	doas reboot
+    fi
+}
+
+msg 'backing up old configuration'
+backup_cfg
+
+msg 'setting new kernel symlink'
+set_kernel
+
+msg 'copying old configuration to new kernel directory'
+copy_old_cfg
+
+msg 'updating old configuration'
+update_old_cfg
+
+msg 'building kernel'
+build_kernel
+
+msg 'installing kernel'
+install_kernel
+
+msg 'updating bootloader'
+update_grub

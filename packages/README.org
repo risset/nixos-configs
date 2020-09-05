@@ -1,0 +1,6 @@
+* Packages
+Configuration for which packages should be installed
+
+*Base*: packages present on all systems
+
+*Desktop*: packages present on desktop systems running Xorg, etc

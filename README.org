@@ -1,0 +1,4 @@
+* My NixOS Configuration
+I am currently in the process of switching to NixOS on all my systems,
+and transferring all my dotfiles here. The new configuration format
+has also inspired me to make quite a lot of tweaks to certain things.

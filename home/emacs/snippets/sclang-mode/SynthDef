@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: SynthDef
+# key: s
+# --
+SynthDef(\\${name}, {
+    var sig = $0;
+
+    Out.ar(\out.kr(0), Pan2.ar(sig, \pan.kr(0)));
+}).add;
