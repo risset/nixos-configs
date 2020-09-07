@@ -9,6 +9,7 @@
       fzf
       gnupg
       gnumake
+      inotify-tools
       pass
       ripgrep
       rsync

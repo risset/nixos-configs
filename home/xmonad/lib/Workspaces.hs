@@ -7,12 +7,12 @@ import XMonad.Actions.DynamicProjects
 
 -- Projects that are always present at the start of an X session
 spaces :: [[Char]]
-spaces = ["admin", "music", "chat", "web"]
+spaces = ["nix", "music", "chat", "web"]
 
 -- Full list of projects, each are defined below
 projects :: [Project]
 projects =
-    [ admin
+    [ nix
     , music
     , chat
     , web
@@ -30,9 +30,9 @@ projects =
     ]
 
 -- System administration, package management, etc.
-admin :: Project
-admin = Project { projectName      = "admin"
-                , projectDirectory = "~/nixos"
+nix :: Project
+nix = Project { projectName      = "nix"
+                , projectDirectory = "~/nix"
                 , projectStartHook = Just $ do spawn $ C.emacs "."
                 }
 

@@ -9,7 +9,6 @@
       cava
       discord
       dunst
-      fcitx-configtool
       feh
       ffmpeg
       gimp
@@ -17,7 +16,6 @@
       haskellPackages.xmobar
       ibus
       jack2
-      kakasi
       libjack2
       libnotify
       maim
@@ -31,6 +29,7 @@
       rofi-pass
       rofi-systemd
       slock
+	    steam
       supercollider_scel
       xbanish
       xclip
@@ -76,7 +75,7 @@
     # Input
     i18n.inputMethod = {
       enabled = "fcitx";
-      ibus.engines = with pkgs.fcitx-engines; [
+      fcitx.engines = with pkgs.fcitx-engines; [
         mozc
       ];
     };
@@ -118,12 +117,6 @@
             };
           };
         };
-      };
-
-      syncthing = {
-        enable = true;
-        openDefaultPorts = true;
-        user = "risset";
       };
 
       urxvtd = {

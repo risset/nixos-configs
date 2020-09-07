@@ -1,5 +1,4 @@
-default:
-	home_manager rebuild
+default: home-manager rebuild
 
 home-manager:
 	home-manager switch

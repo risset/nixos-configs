@@ -20,9 +20,19 @@
       fsType = "ext4";
     };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
-    opengl.driSupport32Bit = true;
+    opengl = {
+      driSupport32Bit = true;
+      extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+    };
     nvidia.modesetting.enable = true;
+  };
+
+  services = {
+    xserver.videoDrivers = [ "nvidia" ];
+
+    postgresql = {
+      enable = true;
+    };
   };
 }

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TORRENT_DIR=$HOME/dl/http/torrent
+TORRENT_DIR=$HOME/downloads/torrent
 REMOTE_DIR="seedbox:/home31/lrwz/downloads/watch/rtorrent"
 
 inotifywait --monitor $TORRENT_DIR --event create --event moved_to |

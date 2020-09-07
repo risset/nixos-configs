@@ -31,8 +31,8 @@ keys =
     , ("M-g", switchProjectPrompt C.promptTheme)
 
    -- Programs 
-    , ("M-<Return>", spawn C.term)
-    , ("M-S-<Return>", spawn "emacsclient -c -n -e '(switch-to-buffer nil)'")
+    , ("M-<Return>", spawn "emacsclient -c -n -e '(switch-to-buffer nil)'")
+    , ("M-S-<Return>", spawn C.term)
     , ("M-<Space>", scratchpadSpawnActionTerminal C.term)
 
     -- -- Media
@@ -40,7 +40,6 @@ keys =
     , ("M-S--", spawn "maim-clip -s")
     , ("M-C--", spawn "maim-clip -w")
     , ("M-=", spawn "mpc toggle")
-    , ("M-`", spawn "switch-input-method")
 
     -- -- Window management
     , ("M-x", kill)

@@ -64,7 +64,7 @@ Set flat indentation level throughout org-mode.
 Show \ symbols as UTF8 characters.
 
 #+begin_src emacs-lisp
-(setq org-pretty-entities t)
+(setq org-pretty-entities nil)
 #+end_src
 
 *** Autofill
@@ -262,6 +262,14 @@ Open org windows in new frames.
 ** Pomodoro
 #+begin_src emacs-lisp
 (use-package org-pomodoro)
+#+end_src
+
+** Anki
+*** Anki-editor
+Edit anki flash cards in org-mode.
+
+#+begin_src emacs-lisp
+(use-package anki-editor)
 #+end_src
 
 * Ivy
@@ -1233,7 +1241,12 @@ Mode-specific hydra commands.
 	("L"
 	 org-insert-last-stored-link
 	 "insert last stored link"))
-	
+	 
+	 "Study"
+	(("a"
+	  anki-editor-push-notes
+	  "push cards to anki"))
+	  
 	 "Lists and Tables"
 	(("t"
 	 org-toggle-checkbox
@@ -1421,3 +1434,14 @@ Let TRAMP work properly.
     ad-do-it
     (setenv "GPG_AGENT_INFO" agent)))
 #+end_src
+
+** Fcitx
+#+begin_src emacs-lisp
+(use-package fcitx
+  :config
+  (fcitx-aggressive-setup)
+  (setq fcitx-use-dbus t))
+#+end_src
+
+fjf  
+

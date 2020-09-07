@@ -3,7 +3,7 @@
 # synchronise remote downloads with local directory
 
 SRC=seedbox:/home31/lrwz/downloads
-DEST=/mnt/data/seedbox
+DEST=/storage/seedbox
 
 rsync --recursive \
       --verbose \

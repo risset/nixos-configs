@@ -2,8 +2,8 @@
 
 let
   myName = "risset";
-  myFont = "FiraCode Nerd Font";
   myFontSize = 11;
+  myFont = "FiraCode Nerd Font";
   myXFont = "xft:" + myFont + ":size=" + toString(myFontSize);
   myBg = "#272822";
   myFg = "#f8f8f2";
@@ -83,6 +83,16 @@ in
       enable = true;
       enableZshIntegration = true;
       enableNixDirenvIntegration = true;
+    };
+
+    ssh = {
+      enable = true;
+      matchBlocks = {
+        "seedbox" = {
+          hostname = "boat.seedhost.eu";
+          user = "lrwz";
+        };
+      };
     };
 
     tmux = {
@@ -319,7 +329,8 @@ in
     picom = {
       enable = true;
       vSync = true;
-      backend = "xrender";
+      backend = "glx";
+      
     };
 
     emacs = {
