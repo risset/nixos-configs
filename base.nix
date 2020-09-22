@@ -10,7 +10,7 @@
 
     users.users.risset = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "audio" ];
       group = "users";
       shell = pkgs.zsh;
     };
@@ -23,7 +23,7 @@
       };
     };
 
-    i18n.defaultLocale = "en_GB.UTF-8";
+    i18n.defaultLocale = "ja_JP.UTF-8";
     time.timeZone = "Europe/London";
     console = {
       font = "Lat2-Terminus16";

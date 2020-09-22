@@ -4,9 +4,12 @@ let
   myName = "risset";
   myFontSize = 11;
   myFont = "FiraCode Nerd Font";
-  myXFont = "xft:" + myFont + ":size=" + toString(myFontSize);
+  myJpFont = "Noto Sans Mono CJK JP";
+  toXFont = font: size: "xft:" + font + ":size=" + toString(size);
+  myXFont = toXFont myFont myFontSize;
+  myJpXFont = toXFont myJpFont myFontSize;
   myBg = "#272822";
-  myFg = "#f8f8f2";
+  myFg = "#fafafa";
 in
 {
   programs.home-manager.enable = true;
@@ -17,7 +20,6 @@ in
     homeDirectory = "/home/" + myName;
     sessionVariables = {
       EDITOR = "emacsclient -nw";
-      TERM = "tmux-256color";
       BROWSER = "firefox";
     };
 
@@ -67,10 +69,11 @@ in
 
       shellAliases = {
         l="ls -l";
-        e="emacsclient  -nw";
+        e="emacsclient -nw";
+        v="nvim";
         untar="tar -zxvf";
-        serve="python3 -m http.server";
         ghci="nix-shell -p ghc --command ghci";
+        serve="python3 -m http.server";
       };
     };
 
@@ -98,19 +101,19 @@ in
     tmux = {
       enable = true;
       baseIndex = 1;
+      escapeTime = 0;
       shortcut = "a";
       terminal = "tmux-256color";
       tmuxinator.enable = true;
       disableConfirmationPrompt = true;
-      escapeTime = 0;
       extraConfig = "
-      set -g status-left ''
-      set -g status-right ''
-      set -g status-justify centre
-      setw -g window-status-format ' [#I] #[fg=colour237]#[fg=colour250]#W#[fg=colour244] '
-      setw -g window-status-current-format ' [#I] #[fg=colour237]#[fg=colour250]#W#[fg=colour244] '
-      setw -g window-status-current-style 'fg=colour1 bg=colour0 bold'
-      set -g status-style 'bg=colour0 fg=colour15 dim'
+        set -g status-left ''
+        set -g status-right ''
+        set -g status-justify centre
+        setw -g window-status-format ' [#I] #[fg=colour237]#[fg=colour250]#W#[fg=colour244] '
+        setw -g window-status-current-format ' [#I] #[fg=colour237]#[fg=colour250]#W#[fg=colour244] '
+        setw -g window-status-current-style 'fg=colour1 bg=colour0 bold'
+        set -g status-style 'bg=colour0 fg=colour15 dim'
       ";
       plugins = with pkgs; [
         tmuxPlugins.cpu
@@ -135,6 +138,7 @@ in
       ignores = [
         "*~"
         "*.swp"
+        ".direnv"
       ];
     };
 
@@ -150,7 +154,7 @@ in
       scroll.bar.enable = false;
       fonts = [
         myXFont
-        "xft:Source Han Sans:size=11"
+        myJpXFont
       ];
       extraConfig = {
         background = "rgba:2700/2800/2200/f000";
@@ -182,6 +186,30 @@ in
       enable = true;
       config = {
         profile = "gpu-hq";
+      };
+
+      bindings = {
+        # Seeking
+        l = "seek 5";
+        h = "seek -5";
+        j = "seek -60";
+        k = "seek 60";
+
+        # Cycle between subs
+        K = "cycle sub";
+        J = "cycle sub down";
+
+        # Skip to previous/next subtitle line
+        H = "no-osd sub-seek -1";
+        L = "no-osd sub-seek 1";
+
+        # Add/subtract 50 ms delay from subs
+        Z = "add sub-delay +0.05";
+        z = "add sub-delay -0.05";
+
+        # Adjust timing to previous/next subtitle
+        X = "sub-step 1";
+        x = "sub-step -1";
       };
     };
 
@@ -240,24 +268,22 @@ in
     zathura = {
       enable = true;
       options = {
-        font = myFont + " 11";
+        font = myFont + " " + toString(myFontSize);
         default-bg = myBg;
-        recolor-darkcolor = "#FFFFFF";
-        recolor-lightcolor = "#333333";
-        statusbar-fg = "#f8f8f2";
+        statusbar-fg = myFg;
         statusbar-bg = myBg;
         inputbar-fg = "#75715e";
         inputbar-bg = myBg;
         completion-highlight-fg = "#a6e22e";
-        completion-highlight-bg = "#272722";
-        notification-fg = "#FFFFFF";
+        completion-highlight-bg = myBg;
+        notification-fg = myFg;
         notification-bg  ="#333333";
       };
     };
 
     rofi = {
       enable = true;
-      font = myFont + " 11";
+      font = myFont + " " + toString(myFontSize);
       theme = "Monokai";
     };
 
@@ -288,11 +314,11 @@ in
                   margin-bottom: -1px !important;
                   transition: all 50ms linear 0s !important;
                   z-index: -5 !important;
-      }
+          }
         
               #urlbar {
                   --urlbar-toolbar-height: 32px !important;
-      }
+          }
         
               #TabsToolbar {
                   visibility: collapse !important;
@@ -329,8 +355,7 @@ in
     picom = {
       enable = true;
       vSync = true;
-      backend = "glx";
-      
+      backend = "xrender";
     };
 
     emacs = {
@@ -347,7 +372,7 @@ in
           transparency = 70;
           fame_width = 5;
           frame_color = "#000000";
-          font = myFont + " 11";
+          font = myFont + " " + toString(myFontSize);
         };
 
         urgency_normal = {

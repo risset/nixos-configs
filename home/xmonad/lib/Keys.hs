@@ -36,9 +36,9 @@ keys =
     , ("M-<Space>", scratchpadSpawnActionTerminal C.term)
 
     -- -- Media
-    , ("M--", spawn "maim-clip")
-    , ("M-S--", spawn "maim-clip -s")
-    , ("M-C--", spawn "maim-clip -w")
+    , ("M--", spawn "/home/risset/.bin/maim-clip")
+    , ("M-S--", spawn "/home/risset/.bin/maim-clip -s")
+    , ("M-C--", spawn "/home/risset/.bin/maim-clip -w")
     , ("M-=", spawn "mpc toggle")
 
     -- -- Window management

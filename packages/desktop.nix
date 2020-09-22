@@ -1,37 +1,46 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   config = {
+    # create list of system packages at /etc/current-system-packages
+    environment.etc."current-system-packages".text =
+      let
+        packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
+        sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+        formatted = builtins.concatStringsSep "\n" sortedUnique;
+      in
+        formatted;
+
     environment.systemPackages = with pkgs; [
+      steam
+      audacity
       acpi
       anki
       beets
       cava
       discord
+      emacs
       dunst
       feh
-      ffmpeg
+      ffmpeg-full
       gimp
       glxinfo
       haskellPackages.xmobar
-      ibus
-      jack2
-      libjack2
+      libwebp
       libnotify
       maim
+      mpd
       mpc_cli
-      ncmpcpp
       neofetch
-      netpbm
+      p7zip
+      pandoc
       pulsemixer
-      rofi-file-browser
+      pavucontrol
       rofi-mpd
       rofi-pass
       rofi-systemd
       slock
-	    steam
       supercollider_scel
-      xbanish
       xclip
       youtube-dl
     ];
@@ -48,8 +57,7 @@
         nerdfonts
         emacs-all-the-icons-fonts
         source-code-pro
-        source-sans-pro
-        source-han-sans
+        noto-fonts-cjk
         terminus_font
       ];
 
@@ -58,15 +66,15 @@
         defaultFonts = {
           monospace = [
             "FiraCode Nerd Font"
-            "Source Han Sans"
+            "Noto Sans Mono CJK JP Regular"
           ];
           sansSerif = [
             "Source Sans Pro"
-            "Source Han Sans"
+            "Noto Sans CJK JP Regular"
           ];
           serif = [
             "Source Sans Pro"
-            "Source Han Sans"
+            "Noto Sans CJK JP Regular"
           ];
         };
       };
@@ -86,9 +94,6 @@
       enable = true;
       support32Bit = true;
       extraConfig = "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1";
-      package = pkgs.pulseaudio.override {
-        jackaudioSupport = true;
-      };
     };
 
     # Services
@@ -122,6 +127,23 @@
       urxvtd = {
         enable = true;
       };
+
+      #   jack = {
+      #     jackd = {
+      #       enable = true;
+      #       extraOptions = [ "-dalsa" "-dhw:2" "-r48000" "-p1024" "-n2" ];
+      #     };
+      #   };
+      # };
+
+      # systemd = {
+      #   services = {
+      #     jack.serviceConfig.SupplementaryGroups = [ "users" ];
+      #   };
+      #   user = {
+      #     services.pulseaudio.environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
+      #   };
+      # };
     };
   };
 }

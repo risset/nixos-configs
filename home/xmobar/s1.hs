@@ -1,5 +1,5 @@
 Config {
-      font = "xft:FiraCode Nerd Font:size=11:Source Han Sans:size=11"
+      font = "xft:FiraCode Nerd Font:size=11"
     , borderColor = "#1d1e1f"
     , border = TopB
     , alpha = 230
@@ -7,8 +7,6 @@ Config {
     , fgColor = "#dddddd"
     , position = TopW L 100
     , commands = [
-	Run MPD ["-t", "<state>: <artist> - <title>"] 20,
-
 	Run Memory [
 	    "-t",
 	    "<usedratio>%"
@@ -34,5 +32,5 @@ Config {
 
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "%StdinReader% }{<fc=#f92672>  </fc>%mpd%    <fc=#a6e22e>  </fc>%memory%    <fc=#66d9ef>  </fc>%cpu%    <fc=#ae81ff>  </fc>%date% "
+    , template = "%StdinReader% }{<fc=#a6e22e>  </fc>%memory%    <fc=#66d9ef>  </fc>%cpu%    <fc=#ae81ff>  </fc>%date% "
 }

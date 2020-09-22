@@ -27,6 +27,7 @@ projects =
     , code
     , study
     , compose
+    , audio
     ]
 
 -- System administration, package management, etc.
@@ -139,4 +140,14 @@ seedbox :: Project
 seedbox = Project { projectName = "seedbox"
                 , projectDirectory = "~/dl/http/torrent"
                 , projectStartHook = Just $ do spawn $ C.term
+                }
+
+-- audio
+audio :: Project
+audio = Project { projectName = "audio"
+                , projectDirectory = "~/snd"
+                , projectStartHook = Just $ do spawn $ C.term ++ " -e pulsemixer"
+                                               spawn C.term
+                                               spawn "cadence"
+
                 }

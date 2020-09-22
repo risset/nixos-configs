@@ -269,7 +269,10 @@ Open org windows in new frames.
 Edit anki flash cards in org-mode.
 
 #+begin_src emacs-lisp
-(use-package anki-editor)
+(use-package anki-editor
+  :config
+  (setq anki-editor-create-decks t
+        anki-editor-org-tags-as-anki-tags t))
 #+end_src
 
 * Ivy
@@ -533,7 +536,7 @@ Emacs26+
 
 #+begin_src emacs-lisp
 (auto-save-visited-mode 1)
-(setq auto-save-visited-interval 1)
+(setq auto-save-visited-interval 30)
 #+end_src
 
 *** Indent Settings
@@ -1425,16 +1428,6 @@ Let TRAMP work properly.
              '("*Help*" display-buffer-same-window))
 #+end_src
 
-** Password Prompt
-#+begin_src emacs-lisp
-;; Do not use gpg agent when runing in terminal
-(defadvice epg--start (around advice-epg-disable-agent activate)
-  (let ((agent (getenv "GPG_AGENT_INFO")))
-    (setenv "GPG_AGENT_INFO" nil)
-    ad-do-it
-    (setenv "GPG_AGENT_INFO" agent)))
-#+end_src
-
 ** Fcitx
 #+begin_src emacs-lisp
 (use-package fcitx
@@ -1442,6 +1435,10 @@ Let TRAMP work properly.
   (fcitx-aggressive-setup)
   (setq fcitx-use-dbus t))
 #+end_src
-
-fjf  
-
+** Pinentry
+#+begin_src emacs-lisp
+(use-package pinentry
+  :config
+  (setq epa-pinentry-mode 'loopback)
+  (pinentry-start))
+#+end_src

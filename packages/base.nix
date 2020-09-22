@@ -9,6 +9,7 @@
       fzf
       gnupg
       gnumake
+      lsof
       inotify-tools
       pass
       ripgrep
