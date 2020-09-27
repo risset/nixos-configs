@@ -1,6 +1,7 @@
 module Keys where
 
 import qualified Config as C
+import qualified Util as U
 
 import XMonad 
 import qualified XMonad.StackSet as W   
@@ -36,9 +37,9 @@ keys =
     , ("M-<Space>", scratchpadSpawnActionTerminal C.term)
 
     -- -- Media
-    , ("M--", spawn "/home/risset/.bin/maim-clip")
-    , ("M-S--", spawn "/home/risset/.bin/maim-clip -s")
-    , ("M-C--", spawn "/home/risset/.bin/maim-clip -w")
+    , ("M--", U.screenshot "")
+    , ("M-S--", U.screenshot "-us")
+    , ("M-C--", U.screenshot "-ust 9999999")
     , ("M-=", spawn "mpc toggle")
 
     -- -- Window management
