@@ -2,12 +2,12 @@
 
 KM=risset
 
-# copy latest configuration to keymap directory and timestamp it
-IN_FILE=$HOME/dl/http/$KM.json
+IN_FILE=$HOME/downloads/http/$KM.json
 DATE=$(date +"%d-%m-%y_%H:%M:%S")
 FILENAME=$(basename $IN_FILE)
 EXT="${FILENAME##*.}"
 OUT_FILE=$ERGODOX_PATH/configs/$FILENAME_$DATE.$EXT
+
 mv --verbose $IN_FILE $OUT_FILE
 
 # compile and flash the keyboard

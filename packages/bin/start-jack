@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SR=48000
+PERIOD=64
+DEVICE=hw:3
+
+jack_control start
+jack_control ds alsa
+jack_control dps device $DEVICE
+jack_control dps rate $SR
+jack_control dps nperiods 2
+jack_control dps period $PERIOD

@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# fully update gentoo system and perform other useful tasks along the way   
+# Fully update gentoo system and perform other useful tasks along the way   
+# Not using gentoo atm and not a perfect script but keeping for reference
 
 msg() {
     ANSI_GREEN='\033[0;32m'

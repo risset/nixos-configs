@@ -1,5 +1,6 @@
 #!/bin/sh
 
 # recursively transcode flac files in nested directories to mp3 v0
+# TODO: scale this to be more useful in long term or just use beets for this purpose
 
 fd --type f --extension flac --exec ffmpeg -i "{}" -qscale:a 0 "{.}.mp3"

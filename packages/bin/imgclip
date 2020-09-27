@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# requires xclip and netnpbm
+# copy image to clipboard, requires xclip and netnpbm
 
 CMD='xclip -selection clipboard -t image/png'
 

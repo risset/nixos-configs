@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Watch dir for new files; transfer them to remote server
+
 TORRENT_DIR=$HOME/downloads/torrent
 REMOTE_DIR="seedbox:/home31/lrwz/downloads/watch/rtorrent"
 
