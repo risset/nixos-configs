@@ -37,7 +37,6 @@ in
     file.".config/neofetch/config.conf".source = ./neofetch.conf;
     file.".config/feh/themes".source = ./feh;
     file.".config/beets/config.yaml".source = ./beets.yaml;
-    file.".bin".source = ./bin;
   };
 
   programs = {

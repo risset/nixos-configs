@@ -34,5 +34,9 @@
     postgresql = {
       enable = true;
     };
+
+    mongodb = {
+      enable = true;
+    };
   };
 }

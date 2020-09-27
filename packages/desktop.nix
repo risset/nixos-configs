@@ -2,7 +2,6 @@
 
 {
   config = {
-    # create list of system packages at /etc/current-system-packages
     environment.etc."current-system-packages".text =
       let
         packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
