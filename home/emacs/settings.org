@@ -411,8 +411,8 @@ Requires Emacs 28+.
 #+begin_src emacs-lisp
 (use-package dap-mode
   :config
-  (require 'dap-go))
-  
+  (dap-mode 1)
+  (require 'dap-gdb-lldb))
 #+end_src
 
 ** DirEnv
@@ -530,6 +530,11 @@ Automatic parentheses handling
 
 #+end_src
 
+** Docker
+#+begin_src emacs-lisp
+(use-package docker-file-mode)
+#+end_src
+
 ** Misc
 *** Autosave
 Emacs26+
@@ -564,7 +569,7 @@ Provide CCLS backend server for LSP.
   ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp)))
   :config
   (setq  ccls-sem-highlight-method nil)
-  (setq ccls-executable "/usr/bin/ccls"))
+  (setq ccls-executable "/nix/store/cwwp09a57k3v76jbvq4kq7fqil09qhv9-ccls-0.20190823.6/bin/ccls"))
 #+end_src
 
 *** Formatting
@@ -583,7 +588,6 @@ Make sure that flycheck is set up for C++ properly.
 (setq lsp-prefer-flymake nil)
 (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
 #+end_src
-
 
 *** CMake 
 Enable CMake syntax highlighting and other features.
@@ -620,6 +624,19 @@ Have projectile ignore .sum and .mod files
 (add-to-list 'projectile-globally-ignored-files "*.mod")
 #+end_src
 
+** Typescript
+#+begin_src emacs-lisp
+(use-package tide
+  :config
+  (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook (lambda()
+				    (interactive)
+				    (tide-setup)
+				    (flycheck-mode +1)
+				    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+				    (eldoc-mode +1)
+				    (tide-hl-identifier-mode +1))))
+#+end_src
 ** Python
 Configuration for Python using pyls.
 
@@ -976,13 +993,29 @@ debug adapter protocol commands.
 
 #+begin_src emacs-lisp
 (defhydra hydra-debug (:color teal)
-  ("a"
-   (dap-breakpoint-add)
-   "add breakpoint")
+  ("t"
+   (dap-breakpoint-toggle)
+   "toggle breakpoint")
 
   ("d"
-   (dap-breakpoint-delete)
-   "delete breakpoint")
+   (dap-debug-last)
+   "debug last")
+
+  ("D"
+   (dap-debug)
+   "debug")
+
+  ("n"
+   (dap-next)
+   "next")
+
+  ("i"
+   (dap-step-in)
+   "step in")
+
+  ("o"
+   (dap-step-out)
+   "step out")
 
   ("l"
    (dap-ui-breakpoints-list)

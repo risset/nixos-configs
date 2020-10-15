@@ -10,7 +10,7 @@
 
     users.users.risset = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "audio" ];
+      extraGroups = [ "wheel" "audio" "adbusers" "docker" ];
       group = "users";
       shell = pkgs.zsh;
     };

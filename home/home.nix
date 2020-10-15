@@ -1,28 +1,31 @@
 { pkgs, lib, ... }:
 
 let
-  myName = "risset";
-  myFontSize = 11;
-  myFont = "FiraCode Nerd Font";
-  myJpFont = "Noto Sans Mono CJK JP";
+  name = "risset";
+
+  ui = {
+    font = "FiraCode Nerd Font";
+    jpFont = "Noto Sans Mono CJK JP";
+    fontSize = 11;
+    bg = "#272822";
+    fg = "#fafafa";
+    xFont = toXFont ui.font ui.fontSize;
+    jpXFont = toXFont ui.jpFont ui.fontSize;
+  };
+
   toXFont = font: size: "xft:" + font + ":size=" + toString(size);
-  myXFont = toXFont myFont myFontSize;
-  myJpXFont = toXFont myJpFont myFontSize;
-  myBg = "#272822";
-  myFg = "#fafafa";
 in
 {
-  programs.home-manager.enable = true;
-
   home = {
     stateVersion = "20.09";
-    username = myName;
-    homeDirectory = "/home/" + myName;
+    username = name;
+    homeDirectory = "/home/" + name;
     sessionVariables = {
       EDITOR = "emacsclient -nw";
       BROWSER = "firefox";
     };
 
+    # configurations not managed by home-manager
     file.".emacs.d" = {
       recursive = true;
       source = ./emacs;
@@ -40,6 +43,10 @@ in
   };
 
   programs = {
+    home-manager = {
+      enable = true;
+    };
+
     zsh = {
       enable = true;
       enableAutosuggestions = false;
@@ -50,6 +57,10 @@ in
         plugins = [
           "direnv"
           "sudo"
+          "docker"
+          "node"
+          "golang"
+          "colored-man-pages"
         ];
       };
       
@@ -72,7 +83,6 @@ in
         v="nvim";
         untar="tar -zxvf";
         ghci="nix-shell -p ghc --command ghci";
-        serve="python3 -m http.server";
       };
     };
 
@@ -106,6 +116,7 @@ in
       tmuxinator.enable = true;
       disableConfirmationPrompt = true;
       extraConfig = "
+        set-option -g renumber-windows on
         set -g status-left ''
         set -g status-right ''
         set -g status-justify centre
@@ -152,17 +163,17 @@ in
       enable = true;
       scroll.bar.enable = false;
       fonts = [
-        myXFont
-        myJpXFont
+        ui.xFont
+        ui.jpXFont
       ];
       extraConfig = {
         background = "rgba:2700/2800/2200/f000";
         depth = 32;
-        foreground = myFg;
-        cursorColor = myFg;
+        foreground = ui.fg;
+        cursorColor = ui.fg;
         cursorBlink = 1;
         cursorUnderline = 1;
-        color0 = myBg;
+        color0 = ui.bg;
         color1 = "#f92672";
         color2 = "#a6e22e";
         color3 = "#f4bf75";
@@ -267,22 +278,22 @@ in
     zathura = {
       enable = true;
       options = {
-        font = myFont + " " + toString(myFontSize);
-        default-bg = myBg;
-        statusbar-fg = myFg;
-        statusbar-bg = myBg;
+        font = ui.font + " " + toString(ui.fontSize);
+        default-bg = ui.bg;
+        statusbar-fg = ui.fg;
+        statusbar-bg = ui.bg;
         inputbar-fg = "#75715e";
-        inputbar-bg = myBg;
+        inputbar-bg = ui.bg;
         completion-highlight-fg = "#a6e22e";
-        completion-highlight-bg = myBg;
-        notification-fg = myFg;
+        completion-highlight-bg = ui.bg;
+        notification-fg = ui.fg;
         notification-bg  ="#333333";
       };
     };
 
     rofi = {
       enable = true;
-      font = myFont + " " + toString(myFontSize);
+      font = ui.font + " " + toString(ui.fontSize);
       theme = "Monokai";
     };
 
@@ -313,11 +324,11 @@ in
                   margin-bottom: -1px !important;
                   transition: all 50ms linear 0s !important;
                   z-index: -5 !important;
-          }
+        }
         
               #urlbar {
                   --urlbar-toolbar-height: 32px !important;
-          }
+        }
         
               #TabsToolbar {
                   visibility: collapse !important;
@@ -371,13 +382,13 @@ in
           transparency = 70;
           fame_width = 5;
           frame_color = "#000000";
-          font = myFont + " " + toString(myFontSize);
+          font = ui.font + " " + toString(ui.fontSize);
         };
 
         urgency_normal = {
           timeout = 5;
-          background = myFg;
-          foreground = myBg;
+          background = ui.fg;
+          foreground = ui.bg;
         };
       };
     };

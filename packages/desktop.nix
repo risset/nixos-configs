@@ -11,40 +11,39 @@
         formatted;
 
     environment.systemPackages = with pkgs; [
-      steam
-      audacity
       acpi
       anki
       beets
       cava
       discord
-      emacs
       dunst
+      emacs
       feh
       ffmpeg-full
       gimp
-      glxinfo
       haskellPackages.xmobar
-      libwebp
       libnotify
+      libwebp
       maim
-      mpd
       mpc_cli
+      mpd
       neofetch
       p7zip
       pandoc
       pulsemixer
-      pavucontrol
-      rofi-mpd
       rofi-pass
       rofi-systemd
       slock
+      steam
       supercollider_scel
-      xclip
       youtube-dl
     ];
 
     programs = {
+      adb = {
+        enable = true;
+      };
+
       slock = {
         enable = true;
       };
@@ -143,6 +142,12 @@
       #     services.pulseaudio.environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
       #   };
       # };
+    };
+
+    virtualisation = {
+      docker = {
+        enable = true;
+      };
     };
   };
 }
