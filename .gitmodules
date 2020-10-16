@@ -1,3 +1,6 @@
 [submodule "modules/musnix"]
 	path = modules/musnix
 	url = https://github.com/musnix/musnix
+[submodule "home/emacs/site-lisp/use-package"]
+	path = home/emacs/site-lisp/use-package
+	url = https://github.com/jwiegley/use-package

@@ -1,33 +1,102 @@
-;; Initial setup happens here. Customisation is done in org-mode via "./settings.org"
-;; Package repos
-(require 'package)
+;;; init.el --- risset's emacs configuration
 
+;; Package management
+(require 'package)
 (setq package-archives '(("gnu" . "https://mirrors.163.com/elpa/gnu/")
 			 ("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")))
+(package-initialize)
 
-
-;; Initialise use-package
+;; Use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
-;; Configure use-package
-(setq use-package-always-ensure t)
+(eval-when-compile
+  (add-to-list 'load-path (expand-file-name "site-lisp/use-package" user-emacs-directory))
+  (require 'use-package))
+  (setq use-package-always-ensure t)
 
 ;; Custom file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (when (file-exists-p custom-file)
     (load custom-file))
 
-(eval-when-compile
-  (require 'use-package))
+;; Packages
+(use-package evil)
+(use-package evil-collection)
+(use-package evil-magit)
+(use-package evil-surround)
+(use-package evil-org)
+(use-package monokai-theme)
+(use-package nlinum)
+(use-package rainbow-delimiters)
+(use-package doom-modeline)
+(use-package ob-go)
+(use-package org-pomodoro)
+(use-package anki-editor)
+(use-package ivy)
+(use-package ivy-xref)
+(use-package counsel-projectile)
+(use-package dired-rsync)
+(use-package dired-rainbow)
+(use-package dired-hide-dotfiles)
+(use-package lsp-mode)
+(use-package lsp-ivy)
+(use-package dap-mode)
+(use-package direnv)
+(use-package flycheck)
+(use-package company)
+(use-package company-lsp)
+(use-package projectile)
+(use-package magit)
+(use-package yasnippet)
+(use-package smartparens)
+(use-package dockerfile-mode)
+(use-package ccls)
+(use-package clang-format)
+(use-package cmake-mode)
+(use-package tide)
+(use-package haskell-mode)
+(use-package rust-mode)
+(use-package cargo)
+(use-package racer)
+(use-package flycheck-rust)
+(use-package slime)
+(use-package json-mode)
+(use-package yaml-mode)
+(use-package nix-mode)
+(use-package nixos-options)
+(use-package company-nixos-options)
+(use-package general)
+(use-package hydra)
+(use-package major-mode-hydra)
+(use-package exec-path-from-shell)
+(use-package sudo-edit)
+(use-package fcitx)
+(use-package pinentry)
 
-;; Common Lisp extensions
-(require 'cl-lib)
-
-;; Load config
-(require 'org)
-(setq vc-follow-symlinks t)
-(org-babel-load-file
-  (expand-file-name "settings.org" user-emacs-directory))
+;; Configurations
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'init-appearance)
+(require 'init-company)
+(require 'init-compilation)
+(require 'init-cpp)
+(require 'init-debug)
+(require 'init-defaults)
+(require 'init-dired)
+(require 'init-direnv)
+(require 'init-evil)
+(require 'init-flycheck)
+(require 'init-functions)
+(require 'init-general)
+(require 'init-go)
+(require 'init-haskell)
+(require 'init-hydra)
+(require 'init-ivy)
+(require 'init-lsp)
+(require 'init-magit)
+(require 'init-org)
+(require 'init-projectile)
+(require 'init-smartparens)
+(require 'init-typescript)
+(require 'init-yasnippet)
